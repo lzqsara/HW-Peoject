@@ -1,0 +1,80 @@
+---
+title: "A4-Q3"
+author: "Zhaoqi Li"
+date: "2023/4/9"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+### Step 1: Load the data and plot transformation
+
+```{r}
+library("astsa") 
+plot(UnempRate)
+```
+The series is not stationary because it shows a seasonal pattern. The trend is  slightly upward.
+
+### Step 2: Check how many differences are required to make the series stationary
+
+```{r}
+library("forecast")
+ndiffs(UnempRate)
+
+```
+
+### Step 3: Take the first seasonal difference series and examine the plots of the series, ACF, and PACF
+
+```{r}
+library("tidyverse")
+UnempRate %>% diff(lag=12) %>% ggtsdisplay()
+```
+According to the plot, the ACF decrease, so we need non-seasonal difference.
+
+### Step 4: Take another first seasonal difference series and examine the plots of the series, ACF, and PACF
+```{r}
+UnempRate %>% diff(lag=12) %>% diff() %>%
+ggtsdisplay()
+```
+According to the plots, there are two spikes at lags 1, 2, 3 in PACF, so we suggest a non-seasonal AR(3). According to the ACF plot, there are significant spikes at lag 1, 2, 3, 4, 5 and lag 12 , so we suggest a non-seasonal MA(5) and a seasonal SMA(1). Thus, our tentative model is $$ ARIMA(3,1,5)Ö(0,1,1)_{12}$$
+```{r}
+UnempRate %>% 
+  Arima(order=c(3, 1, 5), seasonal = c(0, 1, 1)) %>%
+  residuals() %>%
+  ggtsdisplay()
+```
+```{r}
+fit <- Arima(UnempRate, order=c(3, 1, 5), seasonal = c(0, 1, 1)) 
+fit$aic
+fit$aicc
+fit$bic
+checkresiduals(fit)
+```
+According to the value of the BIC, we choose this model to fit the log series. According to the diagnostic plots of the residual and the Ljung-Box portmanteau test statistic, the p-value is 0.2621 ,so we indicate the residuals are white noise but the  fitted model is not very good because the p-value is not very samll.
+
+### Step 5: Forecast the next 12 months
+
+```{r}
+forecast(fit, h=12)
+fit %>%
+  forecast(h=12)%>%
+  autoplot()
+```
+Compared with the perivous model, the new model with the function auto.arima() is better because the vaule of AIC, AICC, and BIC is samller.
+
+```{r}
+fit.12 <- auto.arima(UnempRate)
+fit.12
+```
+```{r}
+checkresiduals(fit.12)
+```
+According to the plots, both models are available. 
+```{r}
+fit.12 %>%
+  forecast(h=12)%>%
+  autoplot()
+```
+
