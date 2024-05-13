@@ -1,0 +1,48 @@
+---
+title: "HW1-Q1"
+author: "Zhaoqi Li"
+date: "2023/1/24"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+### Q1.b
+```{r}
+v1=rt(1000,1)
+v12=v1^2
+hist(v12,col = "pink")
+
+v8=rt(1000,8)
+v82=v8^2
+hist(v82,col = "pink")
+
+v50=rt(1000,50)
+v502=v50^2
+hist(v502,col = "pink")
+```
+### Q1.c
+
+```{r}
+v1=rt(1000,1)
+v12=v1^2
+hist(v12,prob=TRUE,col = "pink")
+x1<-seq(min(v12),max(v12),length=1000)
+lines(x1,df(x1,1,1),col="blue",lwd=2)
+      
+
+v8=rt(1000,8)
+v82=v8^2
+hist(v82,prob=TRUE,col = "pink")
+x8<-seq(min(v82),max(v82),length=1000)
+lines(x8,df(x8,1,8),col="blue",lwd=2)
+
+v50=rt(1000,50)
+v502=v50^2
+hist(v502,prob=TRUE,col = "pink")
+x50<-seq(min(v502),max(v502),length=1000)
+lines(x50,df(x50,1,50),col="blue",lwd=2)
+```
+

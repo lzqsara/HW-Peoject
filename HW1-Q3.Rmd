@@ -1,0 +1,34 @@
+---
+title: "HW1-Q3"
+author: "Zhaoqi Li"
+date: "2023/1/26"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+### v
+
+```{r}
+qnorm(1-0.025)
+1-pnorm(1.96-(2*sqrt(78))/9)+pnorm(-1.96-(2*sqrt(78))/9)
+```
+
+### v
+
+```{r}
+sigma1<-5
+sigma2<-7
+delta <-2
+alpha<-0.05
+beta<-0.1
+r<-2
+n1<-((2*sigma1+sigma2)*(qnorm(1-beta)+qnorm(1-alpha/2))^2)/(2*delta^2)
+n2<-2*n1
+n<-n1+n2
+n
+
+```
+

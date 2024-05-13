@@ -1,0 +1,51 @@
+---
+title: "HW1-Q4"
+author: "Zhaoqi Li"
+date: "2023/1/25"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+### ii
+
+```{r}
+c<-1.5
+y1m<- 42; s1sq<- 41; n1<- 11
+y2m<- 51; s2sq<- 65; n2<- 9
+df<- n1+n2-2
+s1psq<- ((n1-1)*s1sq + (n2-1)*s2sq/c)/df
+
+tObs<-  (y1m - y2m)/sqrt(s1psq*(1/n1+c/n2))
+pval<- 2*(1-pt(abs(tObs), df))
+pval
+```
+
+### iii
+
+```{r}
+set.seed(407)
+
+sigma<- sqrt(40); theta<- 0.5; ratio=1.5; alpha<- 0.05; Runs<- 5000
+
+n1<-seq(5,300, by=1)
+power<- numeric(0)
+
+for(i in 1:length(n1)){
+n2<- 1.5*n1[i]; df<- n1[i]+n2-2; tval<- qt(1-alpha/2,df)
+
+ diff<- rnorm(Runs,mean=theta*sigma,sd=sigma*sqrt(1/n1[i] +c/n2))
+ s2<- sigma^2*rchisq(Runs,df=df)/df
+ ts<- diff/sqrt(s2*(1/n1[i]+1/n2))
+
+ power[i]<- sum( abs(ts) >= tval)/Runs
+}
+
+n<- 2.5*n1
+
+plot(n,power,type = "l",main = "Power of Two-Sample T-Test using simulations",  
+     xlab = "n",ylab = "Power")
+
+```

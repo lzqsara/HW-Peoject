@@ -1,0 +1,71 @@
+---
+title: "HW1-Q5"
+author: "Zhaoqi Li"
+date: "2023/9/30"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+library(ISLR)
+```
+
+### a.
+```{r}
+model1 <- lm(Sales ~ Price + Urban + US, data = Carseats)
+```
+
+### b.
+```{r}
+summary(model1)
+```
+
+### Interpretation
+Price: If other variables are fixed (Urban and USYes), when the price of carseats increase 1 dollar, the sales of car seats will decrease 54.46 on average.
+
+UrbanYes: If other variables are fixed (Price and USYes), when the location is in urban, the sales of car seats will decrease 21.91 on average than that is not in urban.
+
+USYes: If other variables are fexed (Price and UrbanYes), when the location is in US, the sales of car seats will increase 1201 on average than that is not in US.
+
+### c.
+
+$$ Sales_i = 13.04 - 0.054\times Price_i - 0.021\times Urban_i + 1.2\times US_i $$
+$Urban_i$: If the location is in urban i=1; if the location is not in urban i=0.
+
+$US_i$:If the location is in US i=1; if the location is not in US i=0.
+
+### d.
+According to the output, the p value of Price and USYes are significant at 5% level, for these two predictor we can reject H0.
+
+### e. 
+
+```{r}
+model2 <- lm(Sales ~ Price + US, data = Carseats)
+```
+
+### f. 
+```{r}
+summary(model1)$r.squared
+summary(model2)$r.squared
+```
+
+The $R^2$ of these two models are similar and that of model 1 is a little large.
+No, we should also consider adjusted R-square which consider the complexity of the model. For the R-square, it determines the proportion of variance in the dependent variable that can be explained by the independent variable. Therefore, the increase of covariates will have larger R-square
+### g.
+```{r}
+confint(model2)
+```
+### h.
+```{r}
+model3 <- lm(data=Carseats, Sales ~ Price*US)
+summary(model3)
+```
+### Interpretation
+Price: When the price of carseats increase 1 dollar, the sales of car seats will decrease 53.99 on average for a non-US store.
+
+USYes: When the price is zeor, the sales of car seats for US store is 1295 more on average than that for a non-US store.
+
+Price:USYes: When the price of carseats increase 1 dollar for US stores in US,the sales of car seat will 0.84 fewer than than that for a non-US store. 
