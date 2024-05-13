@@ -1,0 +1,48 @@
+gender,grade,course_number,frequency ,product_category,spending ,reason ,package_lost,satisfaction 
+Female,Third Year,5,8,"Household goods (laundry detergent, toilet paper, etc.);Cosmetics (lipstick, eyeshadow, skin care product, etc.);Food;Clothes and shoes",$500 - $999,very convenient,No,4
+Male,Second Year,4,4,Food,$100 - $499,save money,Yes,3
+Male,First Year,5,3,"Household goods (laundry detergent, toilet paper, etc.);Food",$100 - $499,Save time,No,4
+Female,Third Year,6,10,"Household goods (laundry detergent, toilet paper, etc.);Cosmetics (lipstick, eyeshadow, skin care product, etc.);Food;Clothes and shoes",$1000 - $1500,I do not have time go shopping,No,4
+Female,Second Year,4,3,"Cosmetics (lipstick, eyeshadow, skin care product, etc.);Electronic products (laptop, phone, TV, etc.)",$100 - $499,Sometimes I am lazy to go shopping,Yes,2
+Male,Fourth Year,3,1,"Household goods (laundry detergent, toilet paper, etc.)",Under $100,cheap,No,3
+Female,First Year,5,6,"Household goods (laundry detergent, toilet paper, etc.);Cosmetics (lipstick, eyeshadow, skin care product, etc.);Food;Clothes and shoes",$500 - $999,Save time,No,4
+Male,Second Year,5,2,"Household goods (laundry detergent, toilet paper, etc.);Food",Under $100,convenient,Yes,2
+Female,Third Year,5,4,"Cosmetics (lipstick, eyeshadow, skin care product, etc.);Food;Clothes and shoes",$500 - $999,convenient,No,3
+Male,Fourth Year,4,2,"Household goods (laundry detergent, toilet paper, etc.);Food",Under $100,save money,No,3
+Male,Third Year,6,10,"Household goods (laundry detergent, toilet paper, etc.);Cosmetics (lipstick, eyeshadow, skin care product, etc.);Electronic products (laptop, phone, TV, etc.);Food;Clothes and shoes;Furniture",Over $1500,I took many courses，online shopping is very convenient.,Yes,4
+Female,Second Year,5,7,"Household goods (laundry detergent, toilet paper, etc.);Cosmetics (lipstick, eyeshadow, skin care product, etc.);Food",$500 - $999,I always buy food online which is very convenient.,No,5
+Female,Second Year,5,4,"Household goods (laundry detergent, toilet paper, etc.);Cosmetics (lipstick, eyeshadow, skin care product, etc.);Food",$500 - $999,I do not want to go outside because of covid,No,4
+Male,Second Year,6,6,"Household goods (laundry detergent, toilet paper, etc.);Food",$100 - $499,convenient,No,5
+Male,First Year,6,8,"Household goods (laundry detergent, toilet paper, etc.);Electronic products (laptop, phone, TV, etc.);Food;Clothes and shoes",$1000 - $1500,Save time,No,4
+Female,Third Year,4,3,Clothes and shoes,$100 - $499,convenient,Yes,2
+Male,Second Year,5,4,"Household goods (laundry detergent, toilet paper, etc.);Food",$100 - $499,Very convenient,No,4
+Female,Third Year,6,9,"Household goods (laundry detergent, toilet paper, etc.);Cosmetics (lipstick, eyeshadow, skin care product, etc.);Food;Clothes and shoes;Furniture",Over $1500,Do not need to go outside,Yes,5
+Male,First Year,5,2,Food,Under $100,Save money,No,4
+Female,Third Year,6,7,"Household goods (laundry detergent, toilet paper, etc.);Cosmetics (lipstick, eyeshadow, skin care product, etc.);Food;Clothes and shoes",$1000 - $1500,Very convenient,No,4
+Male,Second Year,5,1,"Household goods (laundry detergent, toilet paper, etc.);Food",Under $100,Save money,Yes,2
+Female,Third Year,5,12,"Household goods (laundry detergent, toilet paper, etc.);Cosmetics (lipstick, eyeshadow, skin care product, etc.);Food;Clothes and shoes",$1000 - $1500,I like to buy cosmetics online,No,4
+Male,Third Year,5,7,"Household goods (laundry detergent, toilet paper, etc.);Electronic products (laptop, phone, TV, etc.);Food;Clothes and shoes",$1000 - $1500,I don’t want to go outside ,Yes,3
+Male,Second Year,6,7,"Household goods (laundry detergent, toilet paper, etc.);Food;Clothes and shoes",$1000 - $1500,"I am so busy, don’t have time.",No,4
+Female,Second Year,5,6,"Household goods (laundry detergent, toilet paper, etc.);Cosmetics (lipstick, eyeshadow, skin care product, etc.);Food;Clothes and shoes",$500 - $999,Convenient ,No,4
+Female,Second Year,5,7,"Household goods (laundry detergent, toilet paper, etc.);Cosmetics (lipstick, eyeshadow, skin care product, etc.);Food;Clothes and shoes",$500 - $999,,No,4
+Male,Second Year,5,4,"Household goods (laundry detergent, toilet paper, etc.);Electronic products (laptop, phone, TV, etc.);Food",$100 - $499,Save time ,Yes,2
+Male,Fourth Year,3,1,"Household goods (laundry detergent, toilet paper, etc.);Food",Under $100,Save time ,Yes,2
+Female,Fourth Year,4,6,"Household goods (laundry detergent, toilet paper, etc.);Cosmetics (lipstick, eyeshadow, skin care product, etc.);Food;Clothes and shoes",$500 - $999,Convenient ,No,4
+Female,Second Year,6,10,"Household goods (laundry detergent, toilet paper, etc.);Cosmetics (lipstick, eyeshadow, skin care product, etc.);Food;Clothes and shoes",$1000 - $1500,Don’t have time ,No,4
+Female,Third Year,5,7,"Cosmetics (lipstick, eyeshadow, skin care product, etc.);Food;Clothes and shoes",$1000 - $1500,Very convenient ,No,4
+Female,Second Year,5,6,"Cosmetics (lipstick, eyeshadow, skin care product, etc.);Food;Clothes and shoes",$500 - $999,Convenient ,No,5
+Male,Second Year,5,6,"Household goods (laundry detergent, toilet paper, etc.);Cosmetics (lipstick, eyeshadow, skin care product, etc.);Food;Clothes and shoes",$500 - $999,I am afraid of covid ,No,5
+Male,Third Year,5,6,"Household goods (laundry detergent, toilet paper, etc.);Cosmetics (lipstick, eyeshadow, skin care product, etc.);Food;Clothes and shoes",$500 - $999,Save time ,No,4
+Male,Second Year,5,2,"Household goods (laundry detergent, toilet paper, etc.);Food",$100 - $499,COVID ,Yes,1
+Female,Third Year,5,7,"Household goods (laundry detergent, toilet paper, etc.);Cosmetics (lipstick, eyeshadow, skin care product, etc.);Food",$500 - $999,Convenient ,No,5
+Male,Third Year,5,7,"Household goods (laundry detergent, toilet paper, etc.);Cosmetics (lipstick, eyeshadow, skin care product, etc.);Food;Clothes and shoes",$500 - $999,Save time ,No,4
+Female,Third Year,6,8,"Household goods (laundry detergent, toilet paper, etc.);Cosmetics (lipstick, eyeshadow, skin care product, etc.);Food;Clothes and shoes",$1000 - $1500,Convenient ,No,5
+Male,Third Year,6,8,"Household goods (laundry detergent, toilet paper, etc.);Electronic products (laptop, phone, TV, etc.);Food;Clothes and shoes;Furniture",$1000 - $1500,Convenient ,No,5
+Female,Third Year,5,8,"Household goods (laundry detergent, toilet paper, etc.);Cosmetics (lipstick, eyeshadow, skin care product, etc.);Food;Clothes and shoes",$1000 - $1500,Don’t need to go outside ,No,4
+Male,Third Year,5,8,"Household goods (laundry detergent, toilet paper, etc.);Electronic products (laptop, phone, TV, etc.);Food;Clothes and shoes",$1000 - $1500,Save time ,No,4
+Female,Third Year,6,8,"Household goods (laundry detergent, toilet paper, etc.);Cosmetics (lipstick, eyeshadow, skin care product, etc.);Food;Clothes and shoes",$1000 - $1500,Convenient ,No,5
+Female,Third Year,6,9,"Household goods (laundry detergent, toilet paper, etc.);Cosmetics (lipstick, eyeshadow, skin care product, etc.);Food;Clothes and shoes;Furniture",Over $1500,COVID ,No,5
+Male,Third Year,6,9,"Household goods (laundry detergent, toilet paper, etc.);Electronic products (laptop, phone, TV, etc.);Food;Clothes and shoes",$1000 - $1500,Convenient ,No,5
+Female,Second Year,5,7,"Household goods (laundry detergent, toilet paper, etc.);Cosmetics (lipstick, eyeshadow, skin care product, etc.);Food;Clothes and shoes",$500 - $999,Convenient ,No,4
+Female,Third Year,4,7,"Household goods (laundry detergent, toilet paper, etc.);Cosmetics (lipstick, eyeshadow, skin care product, etc.);Food;Clothes and shoes",$500 - $999,Save time ,No,5
+Female,Second Year,5,3,"Household goods (laundry detergent, toilet paper, etc.);Cosmetics (lipstick, eyeshadow, skin care product, etc.);Food",$100 - $499,Save time ,Yes,2
