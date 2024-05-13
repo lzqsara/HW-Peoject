@@ -1,0 +1,64 @@
+---
+title: "A2-Q2"
+author: "Zhaoqi Li-1006324639"
+date: "2023/2/16"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+### 1.
+
+```{r,fig.height=4, fig.width=5, fig.align='center'}
+library(TSA)
+data("wages")
+plot.ts(wages)
+```
+There is a strong up trend of the plot
+\newpage
+
+### 2.
+
+```{r}
+reg1 <- lm(wages ~ time(wages))
+summary(reg1)
+```
+\newpage
+### 3.
+
+```{r,,fig.height=4, fig.width=5, fig.align='center'}
+plot(reg1,1)
+plot(reg1,2)
+plot(reg1,3)
+```
+According to residual plots, there is a systematic pattern in the plot, so they are not random. It means the linearity is not satisfied. For the normality, there are obvious deviations on both sides and the points of middle do not fall on the line. Therefore, the normality is also not satisfied. 
+
+\newpage
+
+### 4.
+
+```{r}
+reg2 <- lm(wages ~ time(wages) + I(time(wages)^2))
+summary(reg2)
+```
+\newpage
+### 5.
+
+```{r,fig.height=4, fig.width=5, fig.align='center'}
+plot(reg2,1)
+plot(reg2,2)
+plot(reg2,3)
+```
+The assumptions are still not valid, but better than the first model. For the linearity, there is a systematic pattern in the plot like m shape, so they are not random. For the normality, there are obvious deviations on both sides. Therefore, this model do not satisfy linearity and normality. 
+\newpage
+
+### 6.
+
+```{r}
+anova(reg1,reg2)
+```
+$$H_0:\beta_2=0$$
+$$H_a:\beta_2 !=0$$
+According to the result, the test statistic is 68.586 and the p-value is 6.104e-12 which is less than 0.05. Therefore, we reject $H_0$, and $\beta_2$ is not equal to 0.

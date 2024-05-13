@@ -1,0 +1,40 @@
+---
+title: "A2-Q4"
+author: "Zhaoqi Li-1006324639"
+date: "2023/2/17"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+### 1.
+
+```{r}
+library(astsa)
+temp <- tempr-mean(tempr)
+temp2<-temp^2
+trend<-time(cmort)
+partl4<-stats::lag(part,-4)
+data <- ts.intersect(cmort,trend,temp,temp2,part,partl4)
+fit1<-lm(cmort~trend+temp+temp2+part,data = data)
+fit2<-lm(cmort~trend+temp+temp2+part+partl4,data = data)
+summary(fit2)
+```
+```{r}
+AIC(fit1)/nrow(data)-log(2*pi)
+BIC(fit1)/nrow(data)-log(2*pi)
+AIC(fit2)/nrow(data)-log(2*pi)
+BIC(fit2)/nrow(data)-log(2*pi)
+```
+According to the result, the p-value of $P_{t-4}$ is less than 0.05. By comparing the AIC and BIC of two models, add $P_{t-4}$ to the regression have smaller AIC and BIC, so $P_{t-4}$ is significant to the regression.
+
+### 2.
+```{r}
+data2 <- ts.intersect(cmort,tempr,part,partl4)
+pairs(data2)
+cor(data2)
+```
+According to the result, the correlation of $M_t$ and $P_{t-4}$ is higher than the correlations of $M_t$ and $P_t$, , which means the relationship of $M_t$ and $P_{t-4}$ is more appropriate.

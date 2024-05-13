@@ -1,0 +1,19 @@
+---
+title: "A2-Q3"
+author: "Zhaoqi Li-1006324639"
+date: "2023/2/17"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+### 1.
+
+```{r}
+library(astsa)
+fit<- lm(soi~time(soi))
+summary(fit)
+```
+According to the result, the p-value is less than 0.05, so there is a significant trend in the sea surface temperature.

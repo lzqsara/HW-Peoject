@@ -1,0 +1,37 @@
+---
+title: "A2-Q1"
+author: "Zhaoqi Li-1006324639"
+date: "2023/2/16"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+### 1.
+
+```{r}
+y <- c(9.8,11.0,13.2,15.1,16.0)
+t <- 1:5
+model1 <-lm(y~t)
+summary(model1)
+```
+```{r}
+model2 <-lm(log(y)~t)
+summary(model2)
+```
+According to compare the R squared and adjusted R squared of two model, model 1 ($y=\beta_0+\beta_1^t$) has higher value of R squared and adjusted R squared than that of model 2($\log(y)=\log\beta_0+\beta_1t$). Therefore, model 1 fit the data best
+
+\newpage
+
+### 2.
+
+```{r}
+model3 <- lm(y~t+I(t^2))
+summary(model3)
+```
+```{r}
+anova(model1,model3)
+```
+According to compare the R squared and adjusted R squared of model 1 and model 3, the values are similar (model 3 slightly higher than model 1). According to ANOVA, the p-value is larger than 0.05, so model 1 is better.
