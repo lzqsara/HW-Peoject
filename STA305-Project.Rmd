@@ -1,0 +1,130 @@
+---
+title: "The Experiment of the Taste of Yogurt "
+author: |
+  | Name: Zhaoqi Li
+  | Student ID: 1006324639
+date: "April 6, 2023"
+output:
+  pdf_document:
+    latex_engine: xelatex
+  
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## \textcolor{blue}{Introduction}
+Yogurt is a popular food in our life, because it contains protein, calcium and vitamin D and other elements that people need (Nielsen, 2021). The advantages of portability and satiety are deeply loved by people. In addition, I plan to sell yogurt cups in the future. Taste is very important for the sale of yogurt. Therefore, I will mainly focus on what kind of yogurt do people like, that is, what factors affect the taste of yogurt and how these factors affect the taste. I will test the relationship between the taste of yogurt and sugar, fruit and nuts. I carried out an experiment with whether adding sugar, fruit, and nuts as factors and the taste of yogurt as outcome.
+
+## \textcolor{blue}{Materials and Methods}
+
+### Experimental Design and Data
+
+In the experiment, there are 3 factors and every factors have 2 levels. Therefore, I conducted a $2^3$ factorial design below:
+
+$\begin{tabular}{|c|c|c|}
+\hline
+Factors & Level 1  & Level 2 \\
+\hline
+Sugar & not add sugar (-1) & add sugar (+1) \\
+\hline
+Fruits & not add fruits (-1) & add fruits (+1) \\
+\hline
+Nuts & not add nuts (-1) & add nuts (+1) \\
+\hline
+\end{tabular}$
+
+According to the table, this is a $2^3$ factorial design, so there are 8 treatment combinations. Then I replicated the $2^3$ factorial design. Finally, I need 16 observations. To ensure the accuracy of the experiment, we need to control variables. I have prepared sugar-free yogurt and sugar-containing yogurt of the same yogurt brand (OIKOS), and the amount of sugar-free and sugar-containing yogurt is same (half a cup) for every treatment. In addition, if the yogurt add fruits or(and) nuts, the amount of fruits (1 strawberry and 5 blueberries) and nuts (10g) put into yogurt is fixed. I prepared yogurt with eight different combinations of factors and put it in lobby of my condo (159 Wellesley St). Then I randomly found eight people to taste one of the yogurt and rate the taste of yogurt. The rating range is 1-10, where 1 represents the worst and 10 represents the best. To reduce the variability of the experiment, I replicated this process and put yogurt in the lobby of condo where my friend lives (15 Wellesley St), and randomly selected 8 people to taste and rate. The data of experiment is provided in Supplementary material
+
+### Statistical Analysis
+
+In this report, I use multiple linear regression to estimate how the taste of yogurt be influenced by sugar, fruits, and nuts. First, I fit a full model with all interactions. Then I use T-test to get rid of inactive effect and refit model with active effects. After that, I check the assumption of the model by using Q-Q plot and residual plot. Finally, I use main effects and interactions, Lenth
+plot and half normal plot to calculate the influence of these factors (sugar, fruits, and nuts) on the taste of yogurt. In addition, I replicated the factorial design, so I will also calculate the estimated variance and confidence intervals of effects.
+
+## \textcolor{blue}{Results and Discussion}
+
+```{r,echo=FALSE}
+yogurt <- read.csv("yogurt.csv")
+fit <- lm(rating ~ sugar * fruits * nut, data = yogurt)
+summary(fit)
+```
+According to the output of the p-value of sugar, fruits, and nut are all less than 0.05. Therefore, all effects are active. According to the residual plot, there is no obvious pattern, so the assumption of variance constancy is valid. In the Q-Q plot, although there are some deviation of some points, most points follow the Q-Q normal line. Therefore, it is most like to be normal.
+
+* The Q-Q plot and residual plot are provided in Supplementary material
+
+```{r,echo=FALSE, include=FALSE}
+plot(fit,1)
+plot(fit,2)
+```
+### Main Effect and Interactions
+The main effects and interactions are below which is 2 multiply the regression coefficients：
+
+$\begin{tabular}{|c|c|}
+\hline
+Factors & Main Effects \\
+\hline
+sugar & 1.875 \\
+\hline
+Fruits & 3.125\\
+\hline
+Nuts & 2.625 \\
+\hline
+sugar:fruits & -0.125 \\
+\hline
+sugar:nut & -0.125 \\
+\hline
+fruits:nut & -0.375 \\
+\hline
+sugar:fruits:nut & -0.125 \\
+\hline
+\end{tabular}$
+
+According to the output,the p-value of sugar is 0.003164 which is less than 0.05, so we reject $H_0$. It means the effect of sugar is significant for the taste rating of yogurt. When I add sugar in the yogurt, the taste rating will increase 1.875. The p-value of fruits is 0.0001 which is less than 0.05, so we reject $H_0$. It means the effect of fruits is also significant for the taste rating of yogurt. When I add fruit in the yogurt, the taste rating will increase 3.125. The p-value of nut is 0.00039 (less than 0.05), so we reject $H_0$, which represents the effect of nut is significant for the taste rating of yogurt. When I add nut in the yogurt, the taste rating will increase 2.625. However, the p-value of all interaction effects is much larger than 0.05, so we fail to reject $H_0$. It means the intersection of effects are not significant and the effect of sugar, fruits, and nut are independent.
+
+### Lenth plot
+
+```{r ,results='hide',echo=FALSE, fig.height=4, fig.width=6}
+library(BsMD)
+LenthPlot(fit, alpha = 0.05)
+```
+
+According to the Lenth plot, the effect of sugar, fruits, and nut are significant of the taste rating of yogurt, which is higher than SME. For the interaction effects, they are not significant.
+
+### Half Normal Plot
+
+```{r,results='hide',echo=FALSE, fig.height=3 , fig.width=5}
+DanielPlot(fit, half = TRUE)
+```
+
+
+According to the Half Normal Plot, the effects of sugar, fruits, and nut obvious deviate. Therefore, these factors are significant of the taste rating of yogurt.
+
+### Estimated Variance of the Effect
+$\begin{tabular}{|c|c|}
+\hline
+Estimated Variance & Estimated Variance of the Effect \\
+\hline
+ 0.203 & 0.11265 \\
+\hline
+\end{tabular}$
+
+The standard error of all factorial effects is  0.4506 ($0.2253 * 2$), then the estimated variance is 0.203 ($0.4506^2$), the estimated variance of the effect is 0.11265 (0.4506 * 0.25).
+
+
+### 95% Confidence Intervals
+
+```{r,echo=FALSE}
+2* confint.lm(fit)
+```
+According to the output of 95% Confidence Intervals, the main effects (sugar, fruits, and nut) do not contain 0. For example, the 95% CI of nuts is (1.585698, 3.664302). Therefore, these factors are significant of the taste rating of yogurt. For the interaction effects, they all contain 0, so they are not significant of the taste rating of yogurt.
+
+## \textcolor{blue}{Conclusion} 
+In this experiment, I used a $2^3$ factorial design with replication to study How the taste of yogurt be influenced by adding sugar,fruits, and nut. According to the result, it shows that the p-value of sugar, fruits, and nut is much small than 0.05. 
+Therefore, we fail to reject $H_0$ which expresses the influence of adding sugar, fruits, and nut is significant for the taste rating of yogurt. We also found that these factors have a positive effect of the taste rating of yogurt. When I add sugar in the yogurt, the taste rating will increase 1.875. When I add fruit in the yogurt, the taste rating will increase 3.125. When I add nut in the yogurt, the taste rating will increase 2.625. These factors are independent, so the best choose of the taste of yogurt is adding sugar, yogurt, fruits, and nut. The limitation of the experiment is I only replicated one times. The increase of replication will reduce variability. 
+
+## \textcolor{blue}{Reference} 
+Nielsen, B. (2021, July 13). Drinkable Yogurt Among Fastest Growing Breakfast Trends. Retrieved from www.grandecig.com website: https://www.grandecig.com/blog/food-trends-drinkable-yogurt-on-the-rise
+
+
+
