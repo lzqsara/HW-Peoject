@@ -1,0 +1,460 @@
+---
+title: "Final Project"
+author: "Zhaoqi Li"
+date: "2022/12/20"
+output: pdf_document
+---
+
+```{r}
+library(openintro)
+library(tidyverse)
+library(gridExtra)
+library(car)
+```
+
+# Clean data and remove missing value
+
+```{r}
+# Data clean
+my_data <- read_csv("MY2022 Fuel Consumption Ratings.csv")
+fuel_cons <-rename(my_data, engine_size = 'Engine Size(L)'
+                   , fuel_type = 'Fuel Type'
+                   , fuel_consumption_comb = 'Fuel Consumption(Comb (L/100 km))'
+                   , co2_emissions_gkm = 'CO2 Emissions(g/km)'
+                   , fuel_consumption_hwy = 'Fuel Consumption(Hwy (L/100 km))'
+                   , fuel_consumption_city = 'Fuel Consumption (City (L/100 km)'
+                   , co2_rating = 'CO2 Rating'
+                   , fuel_consumption_mpg = 'Fuel Consumption(Comb (mpg))'
+                   , model_year = 'Model Year'
+                   , smog_rating = 'Smog Rating') %>%
+  mutate(co2_emissions = co2_emissions_gkm*100,
+         transmission = case_when(Transmission == "A10" ~ "A",
+                                  Transmission == "A9" ~"A",
+                                  Transmission == "A7" ~"A",
+                                  Transmission == "A6" ~"A",
+                                  Transmission == "AM6" ~"AM",
+                                  Transmission == "AM7" ~"AM",
+                                  Transmission == "AM8" ~"AM",
+                                  Transmission == "AS10" ~"AS",
+                                  Transmission == "AS9" ~"AS",
+                                  Transmission == "AS8" ~"AS",
+                                  Transmission == "AS7" ~"AS",
+                                  Transmission == "AS6" ~"AS",
+                                  Transmission == "AS5" ~"AS",
+                                  Transmission == "AV1" ~"AV",
+                                  Transmission == "AV10" ~"AV",
+                                  Transmission == "AV8" ~"AV",
+                                  Transmission == "AV7" ~"AV",
+                                  Transmission == "AV6" ~"AV",
+                                  Transmission == "M5" ~"M",
+                                  Transmission == "M6" ~"M",
+                                  Transmission == "M7" ~"M")) %>%
+  drop_na()
+
+```
+## Step 0: Divide data into training and testing
+
+```{r}
+# Create training and test set 
+set.seed(147)
+
+# Count the number of observations in the data
+n <- nrow(fuel_cons)
+
+# Randomly choose 80% as training and round number
+training <- sample(1:n, size = round(0.8*n))
+
+# Create a training set
+train <- fuel_cons[training,]
+
+# Create a testing set
+test <- fuel_cons[-training,]
+
+```
+
+## Description of Important Variables
+```{r}
+# Table of the important variables
+
+Variable <-(c("Fuel Consumption","Smog Rating","Transmission", "Cylinders","CO2 Rating","Fuel Type "))
+Type <-(c("Numerical Variable","Numerical Variable","Categorical Variable","Numerical Variable","Numerical Variable","Categorical Variable"))
+Description <-(c("The combine fuel consumption (city 55%, hwy 45%) in liters per 100 kilometers(L/100km)","The emissions of smog-forming pollutants rated on a scale from 1 (worst) to 10 (best)","The type of transmissions.A = automatic; M = manual; AM = automated manual; AS = automatic with select shift; AV = continuously","The size of engine (L)","The emissions of CO2 pollutants rated on a scale from 1 (worst) to 10 (best)","The fuel type of vehicle. X = regular gasoline; Z = premium gasoline; D = diesel ; E = ethanol (E85);N = natural gas"))
+knitr::kable(tibble(Variable,Type, Description),caption="The Description of Important Variables")
+```
+
+## Exploratory Data Analysis of training set
+
+```{r}
+# Box plot and bar plot of predictors in training dataset
+bar_transmission <- train %>%
+  ggplot(aes(x=transmission)) +
+  geom_bar(color='black', fill='pink') +
+  labs(title="Transmission") +
+  coord_flip()
+
+bar_fuel_type <- train %>%
+  ggplot(aes(x=fuel_type)) +
+  geom_bar(color='black', fill='pink') +
+  labs(title="Fuel Type") +
+  coord_flip()
+```
+```{r}
+box_fuel_cons <- train %>%
+  ggplot(aes(y=fuel_consumption_comb)) +
+  geom_boxplot(color= "black", fill="pink") +
+  labs(title="Fuel Consumption")
+box_smog_rating <- train %>%
+  ggplot(aes(y=smog_rating)) +
+  geom_boxplot(color="black", fill="pink") +
+  labs(title="Smog rating")
+
+box_co2_rating <- train %>%
+  ggplot(aes(y=co2_rating)) +
+  geom_boxplot(color="black", fill="pink") +
+  labs(title="CO2 rating")
+
+box_cylinders <- train %>%
+  ggplot(aes(y=Cylinders)) +
+  geom_boxplot(color="black", fill="pink") +
+  labs(title="Cylinders")
+
+grid.arrange(box_fuel_cons,box_smog_rating,box_co2_rating,box_cylinders,bar_fuel_type,bar_transmission,nrow=2)
+```
+
+## Step 1: Choose a starting model
+
+```{r}
+# Full model with all possible predictors
+model_full <- lm(fuel_consumption_comb ~ co2_emissions + smog_rating + transmission + engine_size + Cylinders + co2_rating + fuel_type, data=train)
+```
+
+
+## Step 2: Check condition 1&2 and assumptions
+
+```{r}
+## Condition 1: draw a scatter plot between yi and y_hat
+y_hat <- fitted(model_full)
+yi <- train$fuel_consumption_comb
+plot(yi,y_hat)
+abline(a = 0, b = 1)
+lines(lowess(yi ~ y_hat), lty=2)
+```
+```{r}
+# Condition 2: draw scatter plots between predictors (numerical predictors)
+pairs(~co2_emissions + smog_rating + engine_size + Cylinders + co2_rating, data=train)
+```
+```{r}
+## Residual vs. Fitted model
+res <- model_full$residuals
+y_hat <- fitted(model_full)
+plot(y_hat, res)
+```
+
+```{r}
+## Residual vs. Predictors
+par(mfrow = c(1, 2))
+plot(train$co2_rating, res)
+plot(train$smog_rating,res)
+plot(train$Cylinders,res)
+plot(train$engine_size,res)
+plot(train$co2_emissions,res)
+```
+
+```{r}
+qqnorm(res)
+qqline(res)
+```
+## Step 3 : Model transformations to correct assumption violations
+```{r}
+# Summary box-cox transformation for numerical variables
+summary(powerTransform(cbind(train$fuel_consumption_comb,
+                             train$engine_size,
+                             train$Cylinders,
+                             train$co2_emissions,
+                             train$co2_rating,
+                             train$smog_rating)))
+
+```
+```{r}
+# Create transformed variables
+train_trans <- train %>%
+  mutate(trans_fuel_consumption_comb = fuel_consumption_comb^(-0.5),
+         trans_engine_size =log(engine_size),
+         trans_Cylinders = Cylinders^(-0.5),
+         trans_co2_emissions = co2_emissions^(-0.33),
+         trans_smog_rating = smog_rating^(1.7))
+         
+```
+
+```{r}
+# Fit a new model with the transformed variables
+model_full_trans <- lm(trans_fuel_consumption_comb ~trans_co2_emissions + trans_smog_rating + transmission + trans_engine_size + trans_Cylinders + co2_rating + fuel_type, data = train_trans)
+```
+
+## Step 4: Ensure no multicollinearity is present in the model
+
+```{r}
+# Check the VIF of the model and remove the predictors with high VIF
+vif(model_full_trans)
+```
+```{r}
+# Remove transformed CO2 emissions because it has a high VIF
+model_full_trans1 <- lm(trans_fuel_consumption_comb ~ trans_smog_rating + transmission + trans_engine_size + trans_Cylinders + co2_rating + fuel_type, data = train_trans)
+
+vif(model_full_trans1)
+```
+
+```{r}
+# Remove transformed engine size  because it has a high VIF
+model_full_trans2 <- lm(trans_fuel_consumption_comb ~ trans_smog_rating + transmission + trans_Cylinders  + co2_rating + fuel_type, data = train_trans)
+
+vif(model_full_trans2)
+```
+# Step 5: Model selection
+```{r}
+# Manually select the predictors with low P-value as reduced model
+summary(model_full_trans2)
+```
+```{r}
+# Remove the predictors transmission and cylinders becuase they are not significant
+model_reduced <- lm(trans_fuel_consumption_comb ~ trans_smog_rating + co2_rating + fuel_type, data = train_trans)
+```
+
+
+```{r}
+# Compare the F test of full model and reduced model
+anova(model_reduced, model_full_trans2)
+```
+```{r}
+# Add back a removed predictor to ensure F test is large than 0.05
+model_reduced2 <- lm(trans_fuel_consumption_comb ~ trans_smog_rating + co2_rating + fuel_type + transmission, data = train_trans)
+anova(model_reduced2, model_full_trans2)
+```
+## Check the Condition 1&2 and assumptions of full model 
+
+```{r}
+## Condition 1: draw a scatter plot between yi and y_hat
+y_hat <- fitted(model_full_trans2)
+yi <- train_trans$trans_fuel_consumption_comb
+plot(yi,y_hat)
+abline(a = 0, b = 1)
+lines(lowess(yi ~ y_hat), lty=2)
+```
+```{r}
+# Condition 2: draw scatter plots between predictors (numerical predictors)
+pairs(~trans_smog_rating+co2_rating+trans_Cylinders, data=train_trans)
+```
+```{r}
+## Residual vs. Fitted model 
+res <- model_full_trans2$residuals
+y_hat <- fitted(model_full_trans2)
+plot(y_hat, res)
+```
+
+```{r}
+## Residual vs. Predictors
+plot(train_trans$co2_rating, res)
+plot(train_trans$trans_smog_rating,res)
+plot(train_trans$trans_Cylinders,res)
+```
+```{r}
+# Use normal QQ plot check normality
+qqnorm(res)
+qqline(res)
+```
+## Check the Condition 1&2 and assumptions of reduced model 
+```{r}
+## Condition 1: draw a scatter plot between yi and y_hat
+y_hat <- fitted(model_reduced2)
+yi <- train_trans$trans_fuel_consumption_comb
+plot(yi,y_hat)
+abline(a = 0, b = 1)
+lines(lowess(yi ~ y_hat), lty=2)
+```
+
+
+```{r}
+# Condition 2: draw scatterplots between predictors (can only be done for numerical predictors)
+pairs(~trans_smog_rating+co2_rating, data=train_trans)
+```
+```{r}
+## Residual vs. Fitted
+res1 <- model_reduced2$residuals
+y_hat <- fitted(model_reduced2)
+plot(y_hat, res1)
+```
+
+```{r}
+## Residual vs. Predictors
+par(mfrow = c(1, 2))
+plot(train_trans$co2_rating, res1)
+plot(train_trans$trans_smog_rating,res1)
+```
+```{r}
+# Use normal QQ plot check normality
+qqnorm(res1)
+qqline(res1)
+```
+## Compare the R^2, AIC, and BIC
+```{r}
+summary(model_full_trans2)$adj.r.squared
+summary(model_reduced2)$adj.r.squared
+```
+
+```{r}
+AIC(model_full_trans2)
+AIC(model_reduced2)
+```
+
+
+```{r}
+BIC(model_full_trans2)
+BIC(model_reduced2)
+```
+
+## Step 6:Leverage Point, Outlier, and Influential Point
+```{r}
+# Leverage Point
+h <- hatvalues(model_full_trans2)
+Hcut <- 2*(length(model_full_trans2$coefficients)/nrow(train_trans))
+which(h > Hcut)
+```
+```{r}
+ # Outlier
+r <- rstandard(model_full_trans2)
+which(r < -4 | r > 4)
+```
+
+```{r}
+# Cooks's Distance
+D <- cooks.distance(model_full_trans2)
+Dcut <- qf(0.5,
+               length(model_full_trans2$coefficients),
+           nrow(train_trans)-length(model_full_trans2$coefficients))
+which(D > Dcut)
+```
+
+
+```{r}
+# Leverage Point
+h <- hatvalues(model_reduced2)
+Hcut <- 2*(length(model_reduced$coefficients)/nrow(train_trans))
+which(h > Hcut)
+```
+
+```{r}
+ # Outlier
+r <- rstandard(model_reduced2)
+which(r < -4 | r > 4)
+```
+```{r}
+# Cooks's Distance
+D <- cooks.distance(model_reduced2)
+Dcut <- qf(0.5,
+               length(model_reduced2$coefficients),
+           nrow(train_trans)-length(model_reduced2$coefficients))
+which(D > Dcut)
+```
+
+## Step 7: Model Validation
+
+### Compare EDA 
+```{r}
+bar_transmission <- test %>%
+  ggplot(aes(x=transmission)) +
+  geom_bar(color='black', fill='pink') +
+  labs(title="Transmission") +
+  coord_flip()
+
+bar_fuel_type <- test %>%
+  ggplot(aes(x=fuel_type)) +
+  geom_bar(color='black', fill='pink') +
+  labs(title="Fuel Type") +
+  coord_flip()
+box_fuel_cons <- test %>%
+  ggplot(aes(y=fuel_consumption_comb)) +
+  geom_boxplot(color= "black", fill="pink") +
+  labs(title="Fuel Consumption")
+box_smog_rating <- test %>%
+  ggplot(aes(y=smog_rating)) +
+  geom_boxplot(color="black", fill="pink") +
+  labs(title="Smog rating")
+
+box_co2_rating <- test %>%
+  ggplot(aes(y=co2_rating)) +
+  geom_boxplot(color="black", fill="pink") +
+  labs(title="CO2 rating")
+
+box_cylinders <- test %>%
+  ggplot(aes(y=Cylinders)) +
+  geom_boxplot(color="black", fill="pink") +
+  labs(title="Cylinders")
+
+grid.arrange(box_fuel_cons,box_smog_rating,box_co2_rating,box_cylinders,bar_fuel_type,bar_transmission,nrow=2)
+```
+
+###Apply the same transformation on testing data
+
+```{r}
+test_trans <- test %>%
+  mutate(trans_fuel_consumption_comb = fuel_consumption_comb^(-0.5),
+         trans_engine_size =log(engine_size),
+         trans_Cylinders = Cylinders^(-0.5),
+         trans_co2_emissions = co2_emissions^(-0.33),
+         trans_smog_rating = smog_rating^(1.7))
+```
+
+###Refit the model on testing dat
+```{r}
+model_full_test <- lm(trans_fuel_consumption_comb ~ trans_smog_rating + transmission + trans_Cylinders+co2_rating + fuel_type, data = test_trans)
+```
+
+### Compare the coefficients of training model and testing model
+```{r}
+summary(model_full_trans2)
+```
+```{r}
+summary(model_full_test)
+```
+
+```{r}
+Variable <-(c("Intercept","Smog Rating","TransmissionAM","TransmissionAS","TransmissionAV","TransmissionM","Cylinders","CO2 Rating","Fuel Type E","Fuel Type X","Fuel Type Z"))
+Coefficient_Estimate_Train <-(c("0.2049","0.0001533","0.005526","0.002666","0.006973","0.001748","0.01616","0.02456","-0.06434","-0.01947","-0.02264"))
+Coefficient_Estimate_Test <-(c("0.2096897","0.0002793","0.0084263","0.0037115","0.0057024","-0.0013993","-0.0220062","0.0265233","-0.0587159","-0.0189943","-0.0226666"))
+knitr::kable(tibble(Variable,Coefficient_Estimate_Train,Coefficient_Estimate_Test),caption="The Summary of Coefficient Estimate for Train and Test")
+```
+
+## Check condition 1&2 and assumptions of test model
+
+```{r}
+# Condition 1
+y_hat <- fitted(model_full_test)
+yi <- test_trans$trans_fuel_consumption_comb
+plot(yi,y_hat)
+abline(a = 0, b = 1)
+lines(lowess(yi ~ y_hat), lty=2)
+```
+```{r}
+# Condition 2: draw scatt erplots between predictors (numerical predictors)
+pairs(~trans_smog_rating+co2_rating+trans_Cylinders, data=test_trans)
+```
+```{r}
+## Residual vs. Fitted
+res <- model_full_test$residuals
+y_hat <- fitted(model_full_test)
+plot(y_hat, res)
+```
+```{r}
+## Residual vs. Predictors
+plot(test_trans$co2_rating, res)
+plot(test_trans$trans_smog_rating,res)
+plot(test_trans$trans_Cylinders)
+```
+
+```{r}
+# Use normal QQ plot check normality
+qqnorm(res)
+qqline(res)
+```
+
+ 
